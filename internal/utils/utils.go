@@ -156,6 +156,9 @@ func LoadConfig() error {
 		"130003",
 		"130004":
 		DbImage = "supabase/postgres:13.3.0"
+	case
+		"140001":
+		DbImage = "supabase/postgres:14.1.0"
 	default:
 		return errors.New("Failed reading config: Invalid " + Aqua("dbVersion") + ": " + DbVersion + ".")
 	}

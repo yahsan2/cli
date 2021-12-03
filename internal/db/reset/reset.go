@@ -47,13 +47,13 @@ func Run() error {
 		return err
 	}
 	if errors.Is(ctx.Err(), context.Canceled) {
-		return errors.New("Aborted `supabase db reset`.")
+		return errors.New("Aborted " + utils.Aqua("supabase db reset") + ".")
 	}
 	if err := <-errCh; err != nil {
 		return err
 	}
 
-	fmt.Println("Finished `supabase db reset` on branch " + currBranch + ".")
+	fmt.Println("Finished " + utils.Aqua("supabase db reset") + " on branch " + utils.Aqua(currBranch) + ".")
 	return nil
 }
 
@@ -152,7 +152,7 @@ func run(p *tea.Program) (err error) {
 	}
 	defer func() {
 		if err_ := utils.Docker.ContainerUnpause(ctx, utils.RealtimeId); err_ != nil {
-			err = errors.New("Failed to unpause Realtime: " + err_.Error())
+			err = fmt.Errorf("Failed to unpause Realtime: %w", err_)
 			return
 		}
 	}()
@@ -193,7 +193,7 @@ EOSQL
 		}
 
 		for _, migration := range migrations {
-			p.Send(utils.StatusMsg("Applying migration " + migration.Name() + "..."))
+			p.Send(utils.StatusMsg("Applying migration " + utils.Bold(migration.Name()) + "..."))
 
 			content, err := os.ReadFile("supabase/migrations/" + migration.Name())
 			if err != nil {
@@ -219,7 +219,7 @@ EOSQL
 			}
 		}
 
-		p.Send(utils.StatusMsg("Applying extensions.sql..."))
+		p.Send(utils.StatusMsg("Applying " + utils.Bold("supabase/extensions.sql") + "..."))
 
 		{
 			content, err := os.ReadFile("supabase/extensions.sql")
@@ -248,7 +248,7 @@ EOSQL
 			}
 		}
 
-		p.Send(utils.StatusMsg("Applying seed.sql..."))
+		p.Send(utils.StatusMsg("Applying " + utils.Bold("supabase/seed.sql") + "..."))
 
 		{
 			content, err := os.ReadFile("supabase/seed.sql")
